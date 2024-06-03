@@ -1,0 +1,134 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+  overflow: hidden;
+}
+
+/* Screen Styles */
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* Button Styles */
+.material-button,
+.option-material-button,
+.button,
+#moreOptionsButton,
+#backButton,
+#backToHomeButton {
+  cursor: pointer;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  padding: 15px 30px;
+  font-size: 20px;
+  margin: 10px;
+}
+
+#backButton,
+#backToHomeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+/* Question Area Styles */
+#questionArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.answer-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.answer-option:hover {
+  background-color: #0056b3;
+}
+
+#letter {
+  font-size: 120px;
+  margin-bottom: 30px;
+}
+
+/* Button Grid Styles */
+.button {
+  padding: 40px 80px; /* Increased padding */
+  font-size: 48px; /* Increased font size */
+  margin: 5px;
+  border: 2px solid #007BFF;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.option-material-grid,
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+
+#fireworks-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+#balloon-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+.balloon {
+  position: absolute;
+  bottom: -100px;
+  width: 50px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: red;
+  box-shadow: inset -10px -20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.balloon::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  width: 2px;
+  height: 10px;
+  background-color: red;
+}
