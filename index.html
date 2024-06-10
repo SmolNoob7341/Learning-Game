@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Learning Game</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link href="style.css" rel="stylesheet">
 </head>
 <body>
   <div id="homeScreen" class="screen active">
@@ -24,22 +24,22 @@
       <button class="option-material-button" data-material="English">English</button>
       <button class="option-material-button" data-material="Chinese">Chinese</button>
     </div>
-    <button id="backButton">Back</button>
+    <button class="backButton">Back</button>
   </div>
 
   <div id="gameArea" class="screen">
-    <button id="backToHomeButton">Back to Home</button>
-    <div id="materialDisplay"></div>
-    <div id="questionArea">
-      <div id="letter" class="letter-display">?</div>
-      <div class="answer-options">
-        <button id="ans1" class="button">?</button>
-        <button id="ans2" class="button">?</button>
-        <button id="ans3" class="button">?</button>
-        <button id="ans4" class="button">?</button>
-      </div>
+    <div class="question-container">
+      <p class="question" id="singleQuestion"></p>
+      <div class="options-container" id="singleOptionsContainer"></div>
     </div>
-    <div id="fireworks-container"></div>
+
+    <div class="question-container">
+      <p class="question" id="multipleQuestion"></p>
+      <p class="question" id="multipleQuestion2"></p>
+      <div class="options-container" id="multipleOptionsContainer"></div>
+      <button id="submitButton">Submit</button>
+    </div>
+    <button class="backButton" id="backToHomeButton">Back to Home</button>
     <div id="balloon-container"></div>
   </div>
 

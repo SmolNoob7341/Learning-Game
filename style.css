@@ -1,4 +1,3 @@
-/* Global Styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -11,7 +10,6 @@ body {
   overflow: hidden;
 }
 
-/* Screen Styles */
 .screen {
   display: none;
   flex-direction: column;
@@ -26,12 +24,12 @@ body {
   display: flex;
 }
 
-/* Button Styles */
 .material-button,
 .option-material-button,
 .button,
+.answer-button,
 #moreOptionsButton,
-#backButton,
+.backButton,
 #backToHomeButton {
   cursor: pointer;
   background-color: #007BFF;
@@ -44,67 +42,20 @@ body {
   margin: 10px;
 }
 
-#backButton,
-#backToHomeButton {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-/* Question Area Styles */
-#questionArea {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.answer-options {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.answer-option:hover {
-  background-color: #0056b3;
-}
-
-#letter {
-  font-size: 120px;
-  margin-bottom: 30px;
-}
-
-/* Button Grid Styles */
-.button {
-  padding: 40px 80px; /* Increased padding */
-  font-size: 48px; /* Increased font size */
-  margin: 5px;
-  border: 2px solid #007BFF;
-}
 .material-button:hover,
 .option-material-button:hover,
 #moreOptionsButton:hover,
-#backButton:hover,
+.backButton:hover,
 #backToHomeButton:hover,
 .button:hover {
   background-color: #0056b3;
 }
 
-.option-material-grid,
+.option-button-grid,
 .button-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 10px;
-}
-
-#fireworks-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9999;
 }
 
 #balloon-container {
@@ -130,9 +81,28 @@ body {
 .balloon::before {
   content: '';
   position: absolute;
-  bottom: -10px;
+  bottom: -20px;
   left: 50%;
   width: 2px;
-  height: 10px;
+  height: 20px;
+  background-color: black;
+}
+
+.backButton,
+#moreOptionsButton {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
+
+.selected {
+  background-color: #002e7a;
+}
+
+.correct {
+  background-color: green;
+}
+
+.incorrect {
   background-color: red;
 }
