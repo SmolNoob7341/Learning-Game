@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const materialButtons = document.querySelectorAll(".material-button, .option-material-button");
     const backButton = document.querySelectorAll('.backButton');
     const singleAnswerContainer = document.getElementById("singleOptionsContainer");
-    const multipleAnswerContainer = document.getElementById("multipleOptionsContainer");
+    const multipleAnswerContainer = document.getElementById("multipleOptionsContainer"); 
     const submitButton = document.getElementById("submitButton");
     const singleOptionsContainer = document.getElementById("singleOptionsContainer");
     const multipleOptionsContainer = document.getElementById("multipleOptionsContainer");
@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const singleQuestion = document.getElementById("singleQuestion");
     const multipleQuestion = document.getElementById("multipleQuestion");
     const multipleQuestion2 = document.getElementById("multipleQuestion2");
-
 
     let currentMaterial = "letters";
     let currentQuestion;
