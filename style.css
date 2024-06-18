@@ -10,6 +10,11 @@ body {
   overflow: hidden;
 }
 
+
+.question {
+  font-size: 24px;
+}
+
 .screen {
   display: none;
   flex-direction: column;
@@ -24,12 +29,21 @@ body {
   display: flex;
 }
 
+.submitButton {
+  cursor: pointer;
+  color: black;
+  transition: background-color 0.3s;
+  padding: 5px 10px;
+  font-size: 12px;
+  margin: 10px;
+}
+
 .material-button,
 .option-material-button,
 .button,
 .answer-button,
-#moreOptionsButton,
 .backButton,
+#moreOptionsButton,
 #backToHomeButton {
   cursor: pointer;
   background-color: #007BFF;
@@ -105,4 +119,41 @@ body {
 
 .incorrect {
   background-color: red;
+}
+
+#dragAndDropContainer .options-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+#dragAndDropContainer .drop-area {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  border: 2px dashed #007BFF;
+  padding: 20px;
+}
+
+#dragAndDropContainer .drop-area .drop-zone {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #007BFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#dragAndDropContainer .draggable {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #007BFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+}
+
+#dragAndDropContainer .draggable.dragging {
+  opacity: 0.5;
 }

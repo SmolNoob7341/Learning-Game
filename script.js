@@ -2,20 +2,32 @@ document.addEventListener("DOMContentLoaded", function() {
     const screens = document.querySelectorAll('.screen');
     const materialButtons = document.querySelectorAll(".material-button, .option-material-button");
     const backButton = document.querySelectorAll('.backButton');
+    
     const singleAnswerContainer = document.getElementById("singleOptionsContainer");
-    const multipleAnswerContainer = document.getElementById("multipleOptionsContainer"); 
-    const submitButton = document.getElementById("submitButton");
     const singleOptionsContainer = document.getElementById("singleOptionsContainer");
+    
+    const multipleAnswerContainer = document.getElementById("multipleOptionsContainer"); 
     const multipleOptionsContainer = document.getElementById("multipleOptionsContainer");
-    const balloonContainer = document.getElementById("balloon-container");
+    const multipleSubmitButton = document.getElementById("multipleOptionsButton");
+
+    const dragAndDropContainer = document.getElementById("dragAndDropContainer");
+    const dragDropButton = document.getElementById("dragDropButton");
+    const dropArea = document.getElementById("dropArea");
+    
     const singleQuestion = document.getElementById("singleQuestion");
     const multipleQuestion = document.getElementById("multipleQuestion");
     const multipleQuestion2 = document.getElementById("multipleQuestion2");
+    const dragAndDropQuestion = document.getElementById("dragAndDrop");
 
-    let currentMaterial = "letters";
+    const balloonContainer = document.getElementById("balloon-container");
+    let currentMaterial = "";
     let currentQuestion;
     let selectedAnswers = [];
-
+    const sounds = {
+        error: new Audio("error-126627.mp3"),
+        yay: new Audio("yay-6326.mp3")
+      };
+    
     materialButtons.forEach(button => {
         button.addEventListener("click", function() {
             currentMaterial = this.dataset.material;
@@ -34,100 +46,158 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    document.getElementById("backToHomeButton").addEventListener("click", function() {
-        showScreen(document.getElementById('homeScreen'));
-    });
-
     function showScreen(screen) {
         screens.forEach(s => s.classList.remove('active'));
         screen.classList.add('active');
     }
 
-    function startGame(material) {
+    function startGame(material) {     
+        let questionType; // single, multiple. material is Letters, Pre-K, etc.
+        
         resetGame();
-
+        
         function resetGame() {
-            const questionType = getRandomQuestionType();
-            currentQuestion = generateQuestion(material, questionType);
+            selectedAnswers = [];
+            singleOptionsContainer.innerHTML = '';
+            multipleOptionsContainer.innerHTML = '';
+            singleQuestion.textContent = '';
+            multipleQuestion.textContent = ''; 
+            multipleQuestion2.textContent = '';
+            stopCelebration();
+            resetBackground();
+            clearBalloons();
+            
+            questionType = getRandomQuestionType();
+            currentQuestion = generateQuestion(material);
 
             if (questionType === "single") {
                 showSingleAnswerQuestion(currentQuestion);
             } else if (questionType === "multiple") {
                 showMultipleAnswerQuestion(currentQuestion);
+            } else if (questionType === "dragAndDrop") {
+                showDragAndDropQuestion(currentQuestion);
             }
         }
 
         function getRandomQuestionType() {
-            const types = ["single", "multiple"];
+            const types = ["single", "multiple", "dragAndDrop"];
+            //const types = ["single"];
+            //const types = ["multiple"];
+            //const types = ["dragAndDrop"];
             return types[Math.floor(Math.random() * types.length)];
         }
 
-        function generateQuestion(material, type) {
+        function generateQuestion(material) {
             if (material === "letters") {
-                return generateLetterQuestion(type);
+                return generateLetterQuestion();
             } else if (material === "pre-k") {
-                return generatePreKMathQuestion(type);
+                return generatePreKMathQuestion();
             } else if (material === "kindergarten") {
-                return generateKindergartenMathQuestion(type);
+                return generateKindergartenMathQuestion();
             }
         }
 
-        function generateLetterQuestion(type) {
+        function generateLetterQuestion() {
             const letters = 'abcdefghijklmnopqrstuvwxyz';
             const randomIndex = Math.floor(Math.random() * letters.length);
-            const letter = letters[randomIndex];
-            const question = `What is the letter '${letter}'?`;
-            if(type === "multiple"){
-                let letter2 = letters[Math.floor(Math.random() * letters.length)];
-                while(letter == letter2){
-                    letter2 = letters[Math.floor(Math.random() * letters.length)];
+            const correctAnswer = letters[randomIndex];
+            const question = `What is the letter '${correctAnswer}'?`;
+            if(questionType === "single"){
+                return {questionType, question, correctAnswer};
+            }else if(questionType === "multiple"){
+                let correctAnswer2 = letters[Math.floor(Math.random() * letters.length)];
+                while(correctAnswer == correctAnswer2){
+                    correctAnswer2 = letters[Math.floor(Math.random() * letters.length)];
                 }
-                const question2 = `What is the letter '${letter2}'?`;
-                return {type, question, question2, letter, letter2}
-            }else{
-                return { type, question, correctAnswer: letter};
+                const question2 = `What is the letter '${correctAnswer2}'?`;
+                return {questionType, question, question2, correctAnswer, correctAnswer2}
+            }else if(questionType === "dragAndDrop"){
+                //l to l drag etc
             }
         }
 
-        function generatePreKMathQuestion(type) {
+        function generatePreKMathQuestion() {
             const num1 = Math.floor(Math.random() * 5) + 1;
             const num2 = Math.floor(Math.random() * 5) + 1;
-            const question = `${num1} + ${num2}`;
+            const question = `What is ${num1} + ${num2}?`;
             const correctAnswer = (num1 + num2).toString();
-            return { type, question, correctAnswer };
+            if(questionType === "single"){
+                return {question, correctAnswer};
+            }else if(questionType === "multiple"){
+                let num3 = Math.floor(Math.random() * 5) + 1;
+                let num4 = Math.floor(Math.random() * 5) + 1;
+                let correctAnswer2 = (num3 + num4).toString();
+                while(correctAnswer === correctAnswer2){
+                    num3 = Math.floor(Math.random() * 5) + 1;
+                    num4 = Math.floor(Math.random() * 5) + 1;
+                    correctAnswer2 = (num3 + num4).toString();
+                }
+                const question2 = `What is ${num3} + ${num4}?`;
+                return {question, question2, correctAnswer, correctAnswer2};
+            }else if(questionType === "dragAndDrop"){
+                //1+1 drag to 4 etc
+            }
         }
 
-        function generateKindergartenMathQuestion(type) {
+        function generateKindergartenMathQuestion() {
             const num1 = Math.floor(Math.random() * 10) + 1;
             const num2 = Math.floor(Math.random() * 10) + 1;
-            const question = `${num1} + ${num2}`;
+            const question = `What is ${num1} + ${num2}?`;
             const correctAnswer = (num1 + num2).toString();
-            return { type, question, correctAnswer };
+            if(questionType === "single"){
+                return {question, correctAnswer};
+            }else if(questionType === "multiple"){
+                let num3 = Math.floor(Math.random() * 10) + 1;
+                let num4 = Math.floor(Math.random() * 10) + 1;
+                let correctAnswer2 = (num3 + num4).toString();
+                while(correctAnswer === correctAnswer2){
+                    num3 = Math.floor(Math.random() * 10) + 1;
+                    num4 = Math.floor(Math.random() * 10) + 1;
+                    correctAnswer2 = (num3 + num4).toString();
+                }
+                const question2 = `What is ${num3} + ${num4}?`;
+                return {question, question2, correctAnswer, correctAnswer2};
+            }else if(questionType === "dragAndDrop"){
+                 //2+2 drag to 2 etc
+            }
         }
 
-        function showSingleAnswerQuestion(question) {
-            singleAnswerContainer.style.display = "block";
-            multipleAnswerContainer.style.display = "none";
-            submitButton.style.display = "none";
-            singleQuestion.style.display = "block";
-            multipleQuestion.style.display = "none";
-
-            singleQuestion.textContent = question.question;
-            const answers = generateAnswerOptions(question.correctAnswer);
-            updateAnswerButtons(singleOptionsContainer, answers, "single");
+        function showSingleAnswerQuestion(info) {
+            singleQuestion.textContent = info.question;
+            const answers = generateAnswerOptions(info.correctAnswer);
+            updateAnswerButtons(singleOptionsContainer, answers);
+            annoying();
         }
 
         function showMultipleAnswerQuestion(info) {
-            singleAnswerContainer.style.display = "none";
-            multipleAnswerContainer.style.display = "block";
-            submitButton.style.display = "block";
-            singleQuestion.style.display = "none";
-            multipleQuestion.style.display = "block";
-
             multipleQuestion.textContent = info.question;
             multipleQuestion2.textContent = info.question2;
-            const answers = generateAnswerOptions(info.letter, info.letter2);
-            updateAnswerButtons(multipleOptionsContainer, answers, "multiple");
+            const answers = generateAnswerOptions(info.correctAnswer, info.correctAnswer2);
+            updateAnswerButtons(multipleOptionsContainer, answers);
+            annoying();
+        }
+
+        function showDragAndDropQuestion(info) {
+            dragAndDropQuestion.textContent = info.question;
+            annoying();
+        }
+
+        function annoying() {
+            let single = "none"; let multiple = "none"; let dragAndDrop = "none";
+            if(questionType === "single") single = "block";
+            else if(questionType === "multiple") multiple = "block";
+            else if(questionType === "dragAndDrop") dragAndDrop = "block";
+            
+            singleAnswerContainer.style.display = single;
+            singleQuestion.style.display = single;
+            multipleAnswerContainer.style.display = multiple;
+            multipleQuestion.style.display = multiple;
+            multipleQuestion2.style.display = multiple;
+            multipleSubmitButton.style.display = multiple;
+            dragAndDropContainer.style.display = dragAndDrop;
+            dragAndDropQuestion.style.dislay = dragAndDrop;
+            dragDropButton.style.display = dragAndDrop;
+            dropArea.style.display = dragAndDrop;
         }
 
         function generateAnswerOptions(correctAnswer, correctAnswer2) {
@@ -135,16 +205,16 @@ document.addEventListener("DOMContentLoaded", function() {
             if (correctAnswer2 != null) {
                 answers = [correctAnswer, correctAnswer2];
                 while (answers.length < 4) {
-                    const wrongAnswer = generateRandomLetter();
-                    if (!answers.includes(wrongAnswer) && wrongAnswer !== correctAnswer && wrongAnswer !== correctAnswer2) {
+                    const wrongAnswer = generateRandomAnswer();
+                    if (!answers.includes(wrongAnswer) && wrongAnswer != correctAnswer && wrongAnswer != correctAnswer2) {
                         answers.push(wrongAnswer);
                     }
                 }
             } else {
                 answers = [correctAnswer];
                 while (answers.length < 4) {
-                    const wrongAnswer = generateRandomLetter();
-                    if (!answers.includes(wrongAnswer) && wrongAnswer !== correctAnswer) {
+                    const wrongAnswer = generateRandomAnswer();
+                    if (!answers.includes(wrongAnswer) && wrongAnswer != correctAnswer) {
                         answers.push(wrongAnswer);
                     }
                 }
@@ -152,9 +222,17 @@ document.addEventListener("DOMContentLoaded", function() {
             return shuffleArray(answers);
         }
 
-        function generateRandomLetter() {
-            const letters = 'abcdefghijklmnopqrstuvwxyz';
-            return letters[Math.floor(Math.random() * letters.length)];
+        function generateRandomAnswer() {
+            if (material === "letters"){
+                const letters = 'abcdefghijklmnopqrstuvwxyz';
+                return letters[Math.floor(Math.random() * letters.length)];
+            } else if (material === "pre-k"){
+                const numbers = '1234567890';
+                return numbers[Math.floor(Math.random() * numbers.length)];
+            } else if (material === "kindergarten"){
+                const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
+                return numbers[Math.floor(Math.random() * numbers.length)];
+            }
         }
 
         function shuffleArray(array) {
@@ -165,7 +243,7 @@ document.addEventListener("DOMContentLoaded", function() {
             return array;
         }
 
-        function updateAnswerButtons(container, answers, type) {
+        function updateAnswerButtons(container, answers) {
             container.innerHTML = '';
             answers.forEach(answer => {
                 const button = document.createElement("button");
@@ -173,7 +251,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 button.className = "answer-button";
                 button.dataset.answer = answer; // Assigning the answer to the dataset
                 button.addEventListener("click", () => {
-                    if (type === "single") {
+                    if (questionType === "single") {
                         handleSingleAnswer(button, answer);
                     } else {
                         handleMultipleAnswer(button, answer);
@@ -210,16 +288,34 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         function handleIncorrectAnswer(button) {
-            const buttons = document.querySelectorAll('.answer-button'); // Select all answer buttons
-            buttons.forEach(btn => {
-                if (btn.textContent === button.textContent) {
-                    btn.classList.add("incorrect");
-                }
-            });
+            button.classList.add("incorrect");
+            sounds.error.play();
         }
 
-        submitButton.addEventListener("click", function() {
-            if (selectedAnswers.includes(currentQuestion.correctAnswer)) {
+        multipleSubmitButton.addEventListener("click", function() {
+            const correctAnswersSelected = selectedAnswers.includes(currentQuestion.correctAnswer) && selectedAnswers.includes(currentQuestion.correctAnswer2);
+            
+            if (selectedAnswers.length > 2) {
+                alert("Please select no more than 2 answers.");
+                return;
+            }
+            
+            selectedAnswers.forEach(answer => {
+                const button = Array.from(multipleOptionsContainer.children).find(btn => btn.textContent === answer);
+
+                if (currentQuestion.correctAnswer && currentQuestion.correctAnswer2) {
+                    // Check if the answer is one of the correct answers
+                    if (answer == currentQuestion.correctAnswer || answer == currentQuestion.correctAnswer2) {
+                        button.classList.add("correct");
+                    } else {
+                        handleIncorrectAnswer(button);
+                        selectedAnswers = selectedAnswers.filter(selected => selected !== answer);
+                    }
+                }
+            });
+            
+            // Handle correct and incorrect answers appropriately
+            if (correctAnswersSelected) {
                 selectedAnswers.forEach(answer => {
                     const button = Array.from(multipleOptionsContainer.children).find(btn => btn.textContent === answer);
                     handleCorrectAnswer(button);
@@ -227,12 +323,20 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 selectedAnswers.forEach(answer => {
                     const button = Array.from(multipleOptionsContainer.children).find(btn => btn.textContent === answer);
-                    handleIncorrectAnswer(button);
+                    if (button.classList.contains("incorrect")) {
+                        handleIncorrectAnswer(button);
+                    }
                 });
             }
         });
 
+        document.getElementById("backToHomeButton").addEventListener("click", function() {
+            showScreen(document.getElementById('homeScreen'));
+            resetGame();
+        });
+        
         function startCelebration() {
+            sounds.yay.play();
             changeBackground();
             createBalloons();
         }

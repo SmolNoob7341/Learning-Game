@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Learning Game</title>
   <link href="style.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
   <div id="homeScreen" class="screen active">
@@ -28,17 +31,25 @@
   </div>
 
   <div id="gameArea" class="screen">
-    <div class="question-container">
+    <div id="singleQuestionContainer" class="question-container">
       <p class="question" id="singleQuestion"></p>
       <div class="options-container" id="singleOptionsContainer"></div>
     </div>
 
-    <div class="question-container">
+    <div id="multipleQuestionContainer" class="question-container">
       <p class="question" id="multipleQuestion"></p>
       <p class="question" id="multipleQuestion2"></p>
       <div class="options-container" id="multipleOptionsContainer"></div>
-      <button id="submitButton">Submit</button>
+      <button id="multipleOptionsButton" class="submitButton">Submit</button>
     </div>
+
+    <div id="dragAndDropContainer" class="question-container">
+      <p class="question" id="dragAndDrop"></p>
+      <div class="options-container" id="dragAndDropContainer"></div>
+      <div class="drop-area" id="dropArea"></div>
+      <button id="dragDropButton" class="submitButton">Submit</button>
+    </div>
+    
     <button class="backButton" id="backToHomeButton">Back to Home</button>
     <div id="balloon-container"></div>
   </div>
